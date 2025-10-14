@@ -1,0 +1,249 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpForce = 12f;
+    [SerializeField] private bool enableDoubleJump = true;
+    [SerializeField] private float doubleJumpForce = 10f;
+
+    [Header("Ground Check")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.2f;
+    [SerializeField] private LayerMask groundLayerMask;
+
+    private Rigidbody2D rb;
+    private Animator animator;
+    private bool isGrounded;
+    private bool hasDoubleJumped;
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+
+        // Auto-create ground check if not assigned
+        if (groundCheck == null)
+        {
+            CreateGroundCheck();
+        }
+    }
+
+    private void CreateGroundCheck()
+    {
+        // Create ground check GameObject
+        GameObject groundCheckObj = new GameObject("GroundCheck");
+        groundCheckObj.transform.SetParent(transform);
+
+        // Position it at the bottom of the player
+        Collider2D playerCollider = GetComponent<Collider2D>();
+        if (playerCollider != null)
+        {
+            float bottomY = playerCollider.bounds.min.y - transform.position.y - 0.1f;
+            groundCheckObj.transform.localPosition = new Vector3(0, bottomY, 0);
+        }
+        else
+        {
+            groundCheckObj.transform.localPosition = new Vector3(0, -0.5f, 0);
+        }
+
+        // Assign to groundCheck field
+        groundCheck = groundCheckObj.transform;
+
+        Debug.Log("Auto-created Ground Check at position: " + groundCheck.localPosition);
+    }
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        // Auto-setup layer mask if not set
+        if (groundLayerMask.value == 0)
+        {
+            SetupDefaultLayerMask();
+        }
+    }
+
+    private void SetupDefaultLayerMask()
+    {
+        // Try to find "Ground" layer
+        int groundLayer = LayerMask.NameToLayer("Ground");
+        if (groundLayer != -1)
+        {
+            groundLayerMask = 1 << groundLayer;
+            Debug.Log("Auto-assigned Ground layer to LayerMask");
+        }
+        else
+        {
+            // Use Default layer as fallback
+            groundLayerMask = 1 << LayerMask.NameToLayer("Default");
+            Debug.LogWarning("Ground layer not found! Using Default layer. Create a 'Ground' layer for better collision detection.");
+        }
+    }
+
+    void Update()
+    {
+        HandleInput();
+        CheckGrounded();
+        HandleJump();
+        UpdateAnimation ();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMovement();
+    }
+
+    private void HandleInput()
+    {
+        // Get horizontal input for movement
+    }
+
+    private void CheckGrounded()
+    {
+        Vector3 checkPosition;
+        float checkRadius;
+
+        if (groundCheck != null)
+        {
+            // Use assigned ground check transform
+            checkPosition = groundCheck.position;
+            checkRadius = groundCheckRadius;
+        }
+        else
+        {
+            // Fallback: use player's bottom position
+            Collider2D playerCollider = GetComponent<Collider2D>();
+            if (playerCollider != null)
+            {
+                checkPosition = new Vector3(transform.position.x, playerCollider.bounds.min.y - 0.1f, transform.position.z);
+            }
+            else
+            {
+                checkPosition = transform.position + Vector3.down * 0.6f;
+            }
+            checkRadius = 0.2f;
+        }
+
+        // Perform ground check
+        if (groundLayerMask.value == 0)
+        {
+            // If no layer mask set, check against all layers
+            isGrounded = Physics2D.OverlapCircle(checkPosition, checkRadius) != null;
+        }
+        else
+        {
+            isGrounded = Physics2D.OverlapCircle(checkPosition, checkRadius, groundLayerMask) != null;
+        }
+
+        // Reset double jump when grounded
+        if (isGrounded)
+        {
+            hasDoubleJumped = false;
+        }
+
+        // Debug info (remove this later for performance)
+        if (groundCheck == null && Time.frameCount % 60 == 0) // Only log once per second
+        {
+            Debug.LogWarning("Ground Check Transform not assigned! Using fallback ground detection.");
+        }
+    }
+
+    private void HandleJump()
+    {
+        // Check multiple jump inputs for easier testing
+        bool jumpPressed = Input.GetButtonDown("Jump") ||
+                          Input.GetKeyDown(KeyCode.Space) ||
+                          Input.GetKeyDown(KeyCode.W) ||
+                          Input.GetKeyDown(KeyCode.UpArrow);
+
+        if (jumpPressed)
+        {
+            if (isGrounded)
+            {
+                // First jump (ground jump)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+                // Set normal jump state with jump count
+                if (animator != null)
+                {
+                    animator.SetBool("isJumping", true);
+                    animator.SetInteger("jumpCount", 1);
+                }
+                Debug.Log("Ground jump successful!");
+            }
+            else if (enableDoubleJump && !hasDoubleJumped)
+            {
+                // Second jump (double jump)
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, doubleJumpForce);
+                hasDoubleJumped = true;
+
+                // Set double jump state with jump count
+                if (animator != null)
+                {
+                    animator.SetBool("isJumping", true);
+                    animator.SetInteger("jumpCount", 2);
+                }
+                Debug.Log("Double jump successful!");
+            }
+            else
+            {
+                Debug.Log($"Cannot jump - no jumps available! Grounded: {isGrounded}, HasDoubleJumped: {hasDoubleJumped}");
+            }
+        }
+    }
+
+    private void HandleMovement()
+    {
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        rb.linearVelocity = new Vector2(horizontalInput * speed, rb.linearVelocity.y);
+
+        // Flip character based on movement direction
+        if(horizontalInput > 0)
+            transform.localScale = new Vector3(1, 1, 1);
+        else if(horizontalInput < 0)
+            transform.localScale = new Vector3(-1, 1, 1);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // Draw ground check radius in editor
+        if (groundCheck != null)
+        {
+            Gizmos.color = isGrounded ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+    }
+    private void UpdateAnimation()
+    {
+        if (animator != null)
+        {
+            bool isRunning = Mathf.Abs(rb.linearVelocity.x) > 0.1f && isGrounded;
+            bool isJumping = !isGrounded;
+
+            // Set animation parameters to match your Animator Controller
+            animator.SetBool("isRunning", isRunning);
+            animator.SetBool("isJumping", isJumping);
+
+            // Reset jump count when grounded
+            if (isGrounded)
+            {
+                animator.SetInteger("jumpCount", 0);
+            }
+            // Note: Animation triggers được set trong HandleJump():
+            // - PlayerJump1: Normal jump animation (1 ảnh nhảy)
+            // - DoubleJump: Special double jump effect animation (hiệu ứng đặc biệt)
+            // PlayerIdle sẽ được trigger tự động khi isRunning = false và isJumping = false
+        }
+    }
+
+    // Debug method to show jump status in inspector
+    private void OnGUI()
+    {
+        if (Application.isPlaying)
+        {
+            GUI.Label(new Rect(10, 10, 200, 20), $"Grounded: {isGrounded}");
+            GUI.Label(new Rect(10, 30, 200, 20), $"Double Jump Used: {hasDoubleJumped}");
+            GUI.Label(new Rect(10, 50, 200, 20), $"Double Jump Enabled: {enableDoubleJump}");
+            GUI.Label(new Rect(10, 70, 200, 20), $"Velocity Y: {rb.linearVelocity.y:F2}");
+        }
+    }
+}
