@@ -161,12 +161,12 @@ public class PlayerController : MonoBehaviour
             {
                 // First jump (ground jump)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-
-                // Set normal jump state with jump count
+                
                 if (animator != null)
                 {
-                    animator.SetBool("isJumping", true);
+                    animator.SetTrigger("Jump");
                     animator.SetInteger("jumpCount", 1);
+                    animator.SetBool("isFalling", false); // Ensure we're not in falling state
                 }
                 Debug.Log("Ground jump successful!");
             }
@@ -176,11 +176,14 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, doubleJumpForce);
                 hasDoubleJumped = true;
 
-                // Set double jump state with jump count
                 if (animator != null)
                 {
-                    animator.SetBool("isJumping", true);
+                    // Interrupt fall animation with jump
+                    animator.SetBool("isFalling", false);
+                    animator.SetTrigger("Jump");
                     animator.SetInteger("jumpCount", 2);
+                    // After jump animation completes, return to fall if still in air
+                    StartCoroutine(ResetJumpCountAfterDelay(0.3f));
                 }
                 Debug.Log("Double jump successful!");
             }
@@ -216,22 +219,54 @@ public class PlayerController : MonoBehaviour
     {
         if (animator != null)
         {
+            // Basic state checks
             bool isRunning = Mathf.Abs(rb.linearVelocity.x) > 0.1f && isGrounded;
-            bool isJumping = !isGrounded;
+            bool isJumping = !isGrounded && rb.linearVelocity.y > 0;
+            bool isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
+            
+            int currentJumpCount = animator.GetInteger("jumpCount");
+            
+            // Handle animation states
+            if (currentJumpCount > 0)
+            {
+                // In jump animation - prioritize over fall
+                isFalling = false;
+            }
+            else if (isFalling && !isJumping)
+            {
+                // Show fall animation when not jumping
+                animator.SetBool("isFalling", true);
+            }
 
-            // Set animation parameters to match your Animator Controller
+            // Set animation parameters
             animator.SetBool("isRunning", isRunning);
             animator.SetBool("isJumping", isJumping);
+            animator.SetBool("isFalling", isFalling);
 
-            // Reset jump count when grounded
+            // Reset states only when grounded
             if (isGrounded)
             {
                 animator.SetInteger("jumpCount", 0);
+                animator.SetBool("isFalling", false);
             }
-            // Note: Animation triggers được set trong HandleJump():
-            // - PlayerJump1: Normal jump animation (1 ảnh nhảy)
-            // - DoubleJump: Special double jump effect animation (hiệu ứng đặc biệt)
-            // PlayerIdle sẽ được trigger tự động khi isRunning = false và isJumping = false
+
+            // Note: Animation logic:
+            // - PlayerJump1: Normal jump (jumpCount = 1) - Priority HIGH
+            // - PlayerJump: Double jump (jumpCount = 2) - Priority HIGH
+            // - PlayerFall: Falling down (isFalling = true, jumpCount = 0) - Priority LOW
+            // - PlayerIdle: Grounded and not moving
+            // - PlayerRun: Grounded and moving
+        }
+    }
+
+    // Reset jump count after animation plays to allow fall animation
+    private System.Collections.IEnumerator ResetJumpCountAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (animator != null && !isGrounded && rb.linearVelocity.y < 0)
+        {
+            animator.SetInteger("jumpCount", 0);
+            animator.SetBool("isFalling", true);  // Re-enable falling animation
         }
     }
 
@@ -244,6 +279,33 @@ public class PlayerController : MonoBehaviour
             GUI.Label(new Rect(10, 30, 200, 20), $"Double Jump Used: {hasDoubleJumped}");
             GUI.Label(new Rect(10, 50, 200, 20), $"Double Jump Enabled: {enableDoubleJump}");
             GUI.Label(new Rect(10, 70, 200, 20), $"Velocity Y: {rb.linearVelocity.y:F2}");
+            if (animator != null)
+            {
+                GUI.Label(new Rect(10, 90, 200, 20), $"Jump Count: {animator.GetInteger("jumpCount")}");
+            }
+        }
+    }
+
+    // Public API used by LevelManager to reset player state at spawn
+    public void ResetPlayer()
+    {
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        // Stop all movement
+        rb.linearVelocity = Vector2.zero;
+
+        // Re-enable control
+        enabled = true;
+
+        // Clear animation state if available
+        if (animator != null)
+        {
+            animator.ResetTrigger("Jump");
+            animator.SetInteger("jumpCount", 0);
+            animator.SetBool("isFalling", false);
         }
     }
 }
