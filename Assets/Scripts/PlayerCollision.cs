@@ -12,7 +12,12 @@ public class PlayerCollision : MonoBehaviour
    {
     if (collision.CompareTag("Coin"))
     {
+        Destroy(collision.gameObject);
         gameManager.AddScore(10);
+    }
+    else if (collision.CompareTag("Trap"))
+    {
+        gameManager.GameOver(); 
     }
    }
 }

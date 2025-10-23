@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 namespace PixelAdventure.Managers
@@ -6,14 +8,16 @@ namespace PixelAdventure.Managers
     public class GameManager : MonoBehaviour
     {
         private int score = 0;
-        public int currentLives = 3;
-
+        private bool isGameOver = false;
         [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private GameObject gameOverUi;
+        [SerializeField] private Button restartButton; 
 
         // ⚠️ Hàm Start phải viết hoa chữ "S"
         void Start()
         {
             UpdateScore();
+            gameOverUi.SetActive(false);
         }
 
         // Update is called once per frame
@@ -25,16 +29,13 @@ namespace PixelAdventure.Managers
         // Hàm cộng điểm
         public void AddScore(int points)
         {
-            score += points;
-            UpdateScore();
+            if(!isGameOver)
+            {
+                score += points;
+                UpdateScore();
+            }
         }
-
-        // Called by gameplay when the player loses a life
-        public void LoseLife()
-        {
-            if (currentLives > 0)
-                currentLives--;
-        }
+    
 
         // Called when the level is completed
         public void CompleteLevel()
@@ -47,6 +48,31 @@ namespace PixelAdventure.Managers
         private void UpdateScore()
         {
             scoreText.text = score.ToString();
+        }
+
+        // Hàm mất mạng - game over trực tiếp vì chỉ có 1 mạng
+        public void LoseLife()
+        {
+            GameOver();
+        }
+
+        public void GameOver()
+        {
+            score = 0;
+            Time.timeScale = 0;
+            gameOverUi.SetActive(true);
+        }
+        public void RestartGame()
+        {
+            isGameOver = false;
+            score = 0;
+            UpdateScore();
+            Time.timeScale = 1;
+            SceneManager.LoadScene("game");
+        }
+        public bool GetIsGameOver()
+        {
+            return isGameOver;
         }
     }
 }

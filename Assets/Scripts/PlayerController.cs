@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using PixelAdventure.Managers;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -17,10 +17,12 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private bool isGrounded;
     private bool hasDoubleJumped;
+    private GameManager gameManager;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        gameManager = FindObjectOfType<GameManager>();
 
         // Auto-create ground check if not assigned
         if (groundCheck == null)
@@ -50,7 +52,7 @@ public class PlayerController : MonoBehaviour
         // Assign to groundCheck field
         groundCheck = groundCheckObj.transform;
 
-        Debug.Log("Auto-created Ground Check at position: " + groundCheck.localPosition);
+    
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -69,18 +71,22 @@ public class PlayerController : MonoBehaviour
         if (groundLayer != -1)
         {
             groundLayerMask = 1 << groundLayer;
-            Debug.Log("Auto-assigned Ground layer to LayerMask");
+
         }
         else
         {
             // Use Default layer as fallback
             groundLayerMask = 1 << LayerMask.NameToLayer("Default");
-            Debug.LogWarning("Ground layer not found! Using Default layer. Create a 'Ground' layer for better collision detection.");
+         
         }
     }
 
     void Update()
-    {
+    {   
+        if(gameManager.GetIsGameOver())
+        {
+            return;
+        }
         HandleInput();
         CheckGrounded();
         HandleJump();
@@ -139,12 +145,6 @@ public class PlayerController : MonoBehaviour
         {
             hasDoubleJumped = false;
         }
-
-        // Debug info (remove this later for performance)
-        if (groundCheck == null && Time.frameCount % 60 == 0) // Only log once per second
-        {
-            Debug.LogWarning("Ground Check Transform not assigned! Using fallback ground detection.");
-        }
     }
 
     private void HandleJump()
@@ -168,7 +168,6 @@ public class PlayerController : MonoBehaviour
                     animator.SetInteger("jumpCount", 1);
                     animator.SetBool("isFalling", false); // Ensure we're not in falling state
                 }
-                Debug.Log("Ground jump successful!");
             }
             else if (enableDoubleJump && !hasDoubleJumped)
             {
@@ -185,11 +184,6 @@ public class PlayerController : MonoBehaviour
                     // After jump animation completes, return to fall if still in air
                     StartCoroutine(ResetJumpCountAfterDelay(0.3f));
                 }
-                Debug.Log("Double jump successful!");
-            }
-            else
-            {
-                Debug.Log($"Cannot jump - no jumps available! Grounded: {isGrounded}, HasDoubleJumped: {hasDoubleJumped}");
             }
         }
     }
@@ -270,22 +264,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Debug method to show jump status in inspector
-    private void OnGUI()
-    {
-        if (Application.isPlaying)
-        {
-            GUI.Label(new Rect(10, 10, 200, 20), $"Grounded: {isGrounded}");
-            GUI.Label(new Rect(10, 30, 200, 20), $"Double Jump Used: {hasDoubleJumped}");
-            GUI.Label(new Rect(10, 50, 200, 20), $"Double Jump Enabled: {enableDoubleJump}");
-            GUI.Label(new Rect(10, 70, 200, 20), $"Velocity Y: {rb.linearVelocity.y:F2}");
-            if (animator != null)
-            {
-                GUI.Label(new Rect(10, 90, 200, 20), $"Jump Count: {animator.GetInteger("jumpCount")}");
-            }
-        }
-    }
-
     // Public API used by LevelManager to reset player state at spawn
     public void ResetPlayer()
     {
@@ -307,5 +285,21 @@ public class PlayerController : MonoBehaviour
             animator.SetInteger("jumpCount", 0);
             animator.SetBool("isFalling", false);
         }
+    }
+
+    // Animation Event Functions (called by Animation Events if they exist)
+    public void OnLandingAnimationEvent()
+    {
+        // Called when landing animation plays
+    }
+
+    public void OnJumpAnimationEvent()
+    {
+        // Called when jump animation plays
+    }
+
+    public void OnFootstepAnimationEvent()
+    {
+        // Called during run animation for footstep sounds
     }
 }

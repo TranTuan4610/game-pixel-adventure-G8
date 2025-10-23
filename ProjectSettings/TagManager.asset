@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Coin
+  - Trap
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -47,6 +49,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 1921045013
+    locked: 0
+  - name: Enemy
+    uniqueID: 4201384029
     locked: 0
   - name: Player
     uniqueID: 352115581
