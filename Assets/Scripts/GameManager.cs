@@ -8,16 +8,18 @@ namespace PixelAdventure.Managers
     public class GameManager : MonoBehaviour
     {
         private int score = 0;
-        private bool isGameOver = false;
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private GameObject gameOverUi;
         [SerializeField] private Button restartButton; 
-
+        [SerializeField] private GameObject gameWinUi;
+        private bool isGameOver = false;
+        private bool isGameWin = false;
         // ⚠️ Hàm Start phải viết hoa chữ "S"
         void Start()
         {
             UpdateScore();
             gameOverUi.SetActive(false);
+            gameWinUi.SetActive(false);
         }
 
         // Update is called once per frame
@@ -29,7 +31,7 @@ namespace PixelAdventure.Managers
         // Hàm cộng điểm
         public void AddScore(int points)
         {
-            if(!isGameOver)
+            if(!isGameOver && !isGameWin)
             {
                 score += points;
                 UpdateScore();
@@ -62,6 +64,12 @@ namespace PixelAdventure.Managers
             Time.timeScale = 0;
             gameOverUi.SetActive(true);
         }
+        public void GameWin()
+        {
+            score = 0;
+            Time.timeScale = 0;
+            gameWinUi.SetActive(true);
+        }
         public void RestartGame()
         {
             isGameOver = false;
@@ -70,9 +78,18 @@ namespace PixelAdventure.Managers
             Time.timeScale = 1;
             SceneManager.LoadScene("game");
         }
+        public void GoToMenu()
+        {
+            SceneManager.LoadScene("menu");
+            Time.timeScale = 1;
+        }
         public bool GetIsGameOver()
         {
             return isGameOver;
+        }
+        public bool GetIsGameWin()
+        {
+            return isGameWin;
         }
     }
 }

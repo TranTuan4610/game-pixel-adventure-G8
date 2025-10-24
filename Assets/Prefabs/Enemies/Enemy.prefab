@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2162794858001640281}
   - component: {fileID: 8894969387454017841}
   - component: {fileID: 4862624640804034573}
-  - component: {fileID: 473920369178128330}
   - component: {fileID: 563265255773639107}
+  - component: {fileID: 7546196738155269356}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8730214485281012811}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.72, y: -1.65, z: 0}
+  m_LocalPosition: {x: -24.634, y: -2.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143,8 +143,28 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &473920369178128330
-BoxCollider2D:
+--- !u!114 &563265255773639107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8730214485281012811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 230c7fcbd625dd540a1debf78e7aa4c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  speed: 2
+  distance: 5
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.2
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheckDistance: 0.5
+--- !u!58 &7546196738155269356
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -177,35 +197,5 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.15981579, y: -0.053849936}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2.125}
-    newSize: {x: 2, y: 2.125}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1.4889889, y: 1.928606}
-  m_EdgeRadius: 0
---- !u!114 &563265255773639107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8730214485281012811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 230c7fcbd625dd540a1debf78e7aa4c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  speed: 2
-  distance: 5
-  groundCheck: {fileID: 0}
-  groundCheckRadius: 0.2
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  wallCheckDistance: 0.5
+  m_Offset: {x: -0.03453636, y: -0.19969797}
+  m_Radius: 0.8210583

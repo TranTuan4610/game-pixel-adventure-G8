@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {   
-        if(gameManager.GetIsGameOver())
+        if(gameManager.GetIsGameOver()||gameManager.GetIsGameWin())
         {
             return;
         }

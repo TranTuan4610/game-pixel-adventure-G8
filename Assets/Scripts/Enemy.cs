@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float speed = 2f;
@@ -15,14 +15,14 @@ public class Enemy : MonoBehaviour
     private Vector3 startPos;
     private bool movingRight = false;
     private Rigidbody2D rb;
-    private BoxCollider2D boxCollider;
+    private CircleCollider2D circleCollider;
     private float lastFlipTime = 0f;
     private float flipCooldown = 0.5f;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        circleCollider = GetComponent<CircleCollider2D>();
         
         if (groundCheck == null)
         {
@@ -45,9 +45,9 @@ public class Enemy : MonoBehaviour
         GameObject groundCheckObj = new GameObject("GroundCheck");
         groundCheckObj.transform.SetParent(transform);
         
-        if (boxCollider != null)
+        if (circleCollider != null)
         {
-            float bottomY = boxCollider.bounds.min.y - transform.position.y - 0.1f;
+            float bottomY = -circleCollider.radius - 0.1f;
             groundCheckObj.transform.localPosition = new Vector3(0, bottomY, 0);
         }
         else
@@ -65,17 +65,17 @@ public class Enemy : MonoBehaviour
         triggerObj.transform.localPosition = Vector3.zero;
         triggerObj.layer = gameObject.layer;
         
-        BoxCollider2D triggerCollider = triggerObj.AddComponent<BoxCollider2D>();
+        CircleCollider2D triggerCollider = triggerObj.AddComponent<CircleCollider2D>();
         triggerCollider.isTrigger = true;
         
-        if (boxCollider != null)
+        if (circleCollider != null)
         {
-            triggerCollider.size = boxCollider.size;
-            triggerCollider.offset = boxCollider.offset;
+            triggerCollider.radius = circleCollider.radius;
+            triggerCollider.offset = circleCollider.offset;
         }
         else
         {
-            triggerCollider.size = new Vector2(1f, 1f);
+            triggerCollider.radius = 0.5f;
         }
         
         triggerObj.AddComponent<EnemyTrigger>();
@@ -145,9 +145,9 @@ public class Enemy : MonoBehaviour
     
     bool CheckGroundAhead()
     {
-        if (boxCollider == null) return true;
+        if (circleCollider == null) return true;
         
-        float offsetX = boxCollider.bounds.extents.x + 0.2f;
+        float offsetX = circleCollider.radius + 0.2f;
         Vector2 frontCheckPos;
         
         if (groundCheck != null)
@@ -156,7 +156,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            float bottomY = boxCollider.bounds.min.y;
+            float bottomY = transform.position.y - circleCollider.radius;
             frontCheckPos = new Vector2(
                 transform.position.x + (movingRight ? offsetX : -offsetX),
                 bottomY
@@ -170,7 +170,7 @@ public class Enemy : MonoBehaviour
     
     bool CheckWallAhead()
     {
-        if (boxCollider == null) return false;
+        if (circleCollider == null) return false;
         
         Vector2 direction = movingRight ? Vector2.right : Vector2.left;
         Vector2 origin = (Vector2)transform.position;
