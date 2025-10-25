@@ -18,12 +18,13 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool hasDoubleJumped;
     private GameManager gameManager;
+    private AudioManager audioManager;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManager>();
-
+        audioManager = FindObjectOfType<AudioManager>();
         // Auto-create ground check if not assigned
         if (groundCheck == null)
         {
@@ -161,6 +162,7 @@ public class PlayerController : MonoBehaviour
             {
                 // First jump (ground jump)
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                audioManager.PlayJumpEffect();
                 
                 if (animator != null)
                 {
