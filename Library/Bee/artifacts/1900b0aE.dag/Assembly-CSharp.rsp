@@ -398,16 +398,20 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.2.6f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.2.6f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 "Assets/Scripts/AudioManager.cs"
+"Assets/Scripts/CharacterSelectUI.cs"
 "Assets/Scripts/ChickenMenu.cs"
 "Assets/Scripts/Coin.cs"
 "Assets/Scripts/Enemy.cs"
 "Assets/Scripts/EnemyHead.cs"
 "Assets/Scripts/EnemyTrigger.cs"
+"Assets/Scripts/Follow_player.cs"
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/Menu.cs"
+"Assets/Scripts/MenuUI.cs"
 "Assets/Scripts/MusicToggle.cs"
 "Assets/Scripts/PlayerCollision.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/PlayerSpawner.cs"
 -langversion:9.0
 /deterministic
 /optimize+
