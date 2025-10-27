@@ -10,11 +10,14 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip WinClip;
     [SerializeField] private AudioClip GameOverClip;
 
+    private const string MusicMutedKey = "MusicMuted";
+
     // Property để truy cập background audio source
     public AudioSource MusicBackground => BackGroundAudioSource;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        LoadMusicState();
         PlayBackGroundMusic();
     }
 
@@ -53,6 +56,26 @@ public class AudioManager : MonoBehaviour
         if (BackGroundAudioSource != null)
         {
             BackGroundAudioSource.mute = !BackGroundAudioSource.mute;
+            SaveMusicState();
+        }
+    }
+
+    private void LoadMusicState()
+    {
+        if (BackGroundAudioSource != null)
+        {
+            bool isMuted = PlayerPrefs.GetInt(MusicMutedKey, 0) == 1;
+            BackGroundAudioSource.mute = isMuted;
+        }
+    }
+
+    private void SaveMusicState()
+    {
+        if (BackGroundAudioSource != null)
+        {
+            int mutedValue = BackGroundAudioSource.mute ? 1 : 0;
+            PlayerPrefs.SetInt(MusicMutedKey, mutedValue);
+            PlayerPrefs.Save();
         }
     }
 }

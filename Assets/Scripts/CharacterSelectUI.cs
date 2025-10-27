@@ -87,10 +87,6 @@ public class CharacterSelectUI_Image : MonoBehaviour
             bool isSel = (i == selected);
             img.sprite = isSel ? selectedSprite : selectSprite;
 
-            // Làm nút mờ/đậm nhẹ
-            var c = img.color;
-            c.a = isSel ? 1f : 0.85f;
-            img.color = c;
         }
 
         // Làm mờ/hiện rõ ảnh đại diện
