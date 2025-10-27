@@ -17,6 +17,12 @@ namespace PixelAdventure.Managers
         // ⚠️ Hàm Start phải viết hoa chữ "S"
         void Start()
         {
+            // Setup auto-rotation cho landscape
+            Screen.autorotateToPortrait = false;
+            Screen.autorotateToLandscapeLeft = true;
+            Screen.autorotateToLandscapeRight = true;
+            Screen.orientation = ScreenOrientation.AutoRotation;
+
             UpdateScore();
             gameOverUi.SetActive(false);
             gameWinUi.SetActive(false);

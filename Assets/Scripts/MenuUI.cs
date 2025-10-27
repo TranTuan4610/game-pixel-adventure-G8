@@ -8,6 +8,12 @@ public class MenuUI : MonoBehaviour
 
     void Start()
     {
+        // Setup auto-rotation cho landscape
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+
         // bảo đảm ban đầu panel chọn nhân vật tắt
         if (characterPanel != null)
             characterPanel.SetActive(false);
