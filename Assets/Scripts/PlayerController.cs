@@ -92,10 +92,18 @@ public class PlayerController : MonoBehaviour
     Button jumpButton = GameObject.Find("Jump")?.GetComponent<Button>();
     EventTrigger leftButton = GameObject.Find("Left")?.GetComponent<EventTrigger>();
     EventTrigger rightButton = GameObject.Find("Right")?.GetComponent<EventTrigger>();
+    GameObject jumpGO  = GameObject.Find("Jump"); 
 
     // Nút Jump
-    if (jumpButton != null)
-        jumpButton.onClick.AddListener(Jump);
+    if (jumpGO != null)
+    {
+        var jumpET = jumpGO.GetComponent<EventTrigger>();
+        if (jumpET == null) jumpET = jumpGO.AddComponent<EventTrigger>();
+        AddEventTrigger(jumpET, EventTriggerType.PointerDown, () => {
+            // Gọi trực tiếp để nhảy ngay lập tức
+            Jump();
+        });
+    }
 
     // Nút Left
     if (leftButton != null)
