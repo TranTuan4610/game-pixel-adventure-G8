@@ -1,46 +1,58 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
+[System.Serializable]
 public class PauseManager : MonoBehaviour
 {
-    [Header("Panels")]
-    [SerializeField] private GameObject backgroundPause; // Panel Pause (BackgroundPause)
+    [Header("UI References")]
+    [Tooltip("Drag the pause panel here")]
+    [SerializeField] private GameObject backgroundPause;
 
-    bool isPaused;
+    private bool isPaused;
 
-    void Awake()
+    private void Awake()
     {
-        if (backgroundPause) backgroundPause.SetActive(false);
+        if (backgroundPause != null) 
+            backgroundPause.SetActive(false);
+            
         Time.timeScale = 1f;
         isPaused = false;
     }
 
-    // Gán vào nút PauseUi
+    /// <summary>
+    /// Call this when pause button is clicked
+    /// </summary>
     public void OpenPause()
     {
         if (isPaused) return;
+        
         isPaused = true;
-        if (backgroundPause) backgroundPause.SetActive(true);
-        Time.timeScale = 0f;                // dừng gameplay
+        if (backgroundPause != null) 
+            backgroundPause.SetActive(true);
+            
+        Time.timeScale = 0f;
     }
 
-    // Gán vào nút Continue trong BackgroundPause
+    /// <summary>
+    /// Call this when continue button is clicked
+    /// </summary>
     public void ClosePause()
     {
         if (!isPaused) return;
+        
         isPaused = false;
-        if (backgroundPause) backgroundPause.SetActive(false);
-        Time.timeScale = 1f;                // chạy lại
+        if (backgroundPause != null) 
+            backgroundPause.SetActive(false);
+            
+        Time.timeScale = 1f;
     }
 
 
 
-    // Phòng hờ: nếu object bị disable, trả timeScale về 1
-    void OnDisable()
+    /// <summary>
+    /// Reset timescale when object is disabled
+    /// </summary>
+    private void OnDisable()
     {
-        if (Time.timeScale == 0f)
-        {
-            Time.timeScale = 1f;
-        }
+        Time.timeScale = 1f;
     }
 }

@@ -1,101 +1,218 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
 
 namespace PixelAdventure.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        private int score = 0;
-        [SerializeField] private TextMeshProUGUI scoreText;
+        [Header("=== UI References ===")]
+        [SerializeField] private TMP_Text scoreText;
+        [SerializeField] private TMP_Text timerText;
         [SerializeField] private GameObject gameOverUi;
-        [SerializeField] private Button restartButton; 
         [SerializeField] private GameObject gameWinUi;
-        private bool isGameOver = false;
-        private bool isGameWin = false;
-        // ⚠️ Hàm Start phải viết hoa chữ "S"
-        void Start()
+
+        [Header("Win Panel Texts")]
+        [SerializeField] private TMP_Text winScoreText;
+        [SerializeField] private TMP_Text winYourTimeText;
+        [SerializeField] private TMP_Text winHighScoreText;
+        [SerializeField] private TMP_Text winBestTimeText;
+
+        [Header("Win Panel Buttons")]
+        [SerializeField] private Button nextLevelButton;
+        [SerializeField] private Button mainMenuButton;
+
+        [Header("=== Game/Level Settings ===")]
+        [SerializeField] private int totalLevels = 3;
+        [SerializeField] private string menuSceneName = "Menu";
+
+        // ----- State -----
+        public int Score { get; private set; }
+        public bool IsGameOver { get; private set; }
+        public bool IsGameWin { get; private set; }
+        public bool IsTimerRunning { get; private set; }
+
+        private float elapsedTime = 0f;
+        private int CurrentLevelIndex => PlayerPrefs.GetInt("SelectedLevel", 0);
+
+        // ==========================
+        private void Awake()
         {
-            // Setup auto-rotation cho landscape
+            if (gameOverUi) gameOverUi.SetActive(false);
+            if (gameWinUi) gameWinUi.SetActive(false);
+
+            if (nextLevelButton) nextLevelButton.onClick.AddListener(NextLevel);
+            if (mainMenuButton) mainMenuButton.onClick.AddListener(GoToMenu);
+        }
+
+        private void Start()
+        {
+            Time.timeScale = 1f;
+
+            // Orientation setup
             Screen.autorotateToPortrait = false;
             Screen.autorotateToLandscapeLeft = true;
             Screen.autorotateToLandscapeRight = true;
             Screen.orientation = ScreenOrientation.AutoRotation;
 
-            UpdateScore();
-            gameOverUi.SetActive(false);
-            gameWinUi.SetActive(false);
+            // Reset states
+            Score = 0;
+            IsGameOver = false;
+            IsGameWin = false;
+            IsTimerRunning = true;
+            elapsedTime = 0f;
+
+            UpdateScoreUI();
+            UpdateTimerUI(0f);
+
+            ActivateOnlyCurrentLevelInScene();
+
+            Application.targetFrameRate = 60;
+            Input.multiTouchEnabled = false;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
-            // (Tùy bạn — nếu không cần cập nhật mỗi frame thì có thể bỏ trống)
+            if (!IsTimerRunning || IsGameOver || IsGameWin) return;
+            elapsedTime += Time.deltaTime;
+            UpdateTimerUI(elapsedTime);
         }
 
-        // Hàm cộng điểm
+        // ==========================
         public void AddScore(int points)
         {
-            if(!isGameOver && !isGameWin)
-            {
-                score += points;
-                UpdateScore();
-            }
-        }
-    
-
-        // Called when the level is completed
-        public void CompleteLevel()
-        {
-            // You can add transitions/UI here later; for now just log
-            Debug.Log("Level Completed");
-        }
-
-        // Hàm cập nhật điểm hiển thị lên UI
-        private void UpdateScore()
-        {
-            scoreText.text = score.ToString();
-        }
-
-        // Hàm mất mạng - game over trực tiếp vì chỉ có 1 mạng
-        public void LoseLife()
-        {
-            GameOver();
+            if (IsGameOver || IsGameWin) return;
+            Score += points;
+            UpdateScoreUI();
         }
 
         public void GameOver()
         {
-            score = 0;
-            Time.timeScale = 0;
-            gameOverUi.SetActive(true);
+            OnGameOver();
         }
+
         public void GameWin()
         {
-            score = 0;
-            Time.timeScale = 0;
-            gameWinUi.SetActive(true);
+            OnWin();
         }
+
+        public void OnGameOver()
+        {
+            if (IsGameOver) return;
+            IsGameOver = true;
+            IsTimerRunning = false;
+            Time.timeScale = 0f;
+            if (gameOverUi) gameOverUi.SetActive(true);
+        }
+
+        public void OnWin()
+        {
+            if (IsGameWin) return;
+            IsGameWin = true;
+            IsTimerRunning = false;
+            Time.timeScale = 0f;
+
+            SaveBestForCurrentLevel(Score, elapsedTime);
+
+            if (winScoreText) winScoreText.text = Score.ToString("000");
+            if (winYourTimeText) winYourTimeText.text = FormatTime(elapsedTime);
+            if (winHighScoreText) winHighScoreText.text = GetBestScore(CurrentLevelIndex).ToString("000");
+            if (winBestTimeText) winBestTimeText.text = FormatTime(GetBestTime(CurrentLevelIndex));
+
+            bool hasNext = CurrentLevelIndex + 1 < totalLevels;
+            if (nextLevelButton) nextLevelButton.gameObject.SetActive(hasNext);
+
+            if (gameWinUi) gameWinUi.SetActive(true);
+        }
+
+        // ==========================
+        private void UpdateScoreUI()
+        {
+            if (scoreText) scoreText.text = Score.ToString("000");
+        }
+
+        private void UpdateTimerUI(float t)
+        {
+            if (timerText) timerText.text = FormatTime(t);
+        }
+
+        public static string FormatTime(float sec)
+        {
+            int m = Mathf.FloorToInt(sec / 60f);
+            int s = Mathf.FloorToInt(sec % 60f);
+            return $"{m:00}:{s:00}";
+        }
+
+        // ==========================
+        private string KeyBestScore(int level) => $"L{level}_BestScore";
+        private string KeyBestTime(int level) => $"L{level}_BestTime";
+
+        private void SaveBestForCurrentLevel(int score, float time)
+        {
+            int lv = CurrentLevelIndex;
+
+            int bestScore = PlayerPrefs.GetInt(KeyBestScore(lv), 0);
+            if (score > bestScore)
+                PlayerPrefs.SetInt(KeyBestScore(lv), score);
+
+            float bestTime = PlayerPrefs.GetFloat(KeyBestTime(lv), 0f);
+            if (bestTime <= 0f || time < bestTime)
+                PlayerPrefs.SetFloat(KeyBestTime(lv), time);
+
+            PlayerPrefs.Save();
+        }
+
+        private int GetBestScore(int level) => PlayerPrefs.GetInt(KeyBestScore(level), 0);
+        private float GetBestTime(int level) => PlayerPrefs.GetFloat(KeyBestTime(level), 0f);
+
+        // ==========================
+        private void ActivateOnlyCurrentLevelInScene()
+        {
+            for (int i = 0; i < totalLevels; i++)
+            {
+                var go = GameObject.Find($"level{i}");
+                if (go) go.SetActive(i == CurrentLevelIndex);
+            }
+        }
+
+        // ==========================
+        #region === EXTRA FUNCTIONS ===
+
         public void RestartGame()
         {
-            isGameOver = false;
-            score = 0;
-            UpdateScore();
-            Time.timeScale = 1;
-            SceneManager.LoadScene("game");
+            Time.timeScale = 1f;
+            IsGameOver = false;
+            IsGameWin = false;
+            Score = 0;
+            elapsedTime = 0f;
+            IsTimerRunning = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        public void NextLevel()
+        {
+            Time.timeScale = 1f;
+            int next = CurrentLevelIndex + 1;
+            if (next >= totalLevels)
+                return;
+
+            PlayerPrefs.SetInt("SelectedLevel", next);
+            PlayerPrefs.Save();
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         public void GoToMenu()
         {
-            SceneManager.LoadScene("menu");
-            Time.timeScale = 1;
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(menuSceneName);
         }
-        public bool GetIsGameOver()
-        {
-            return isGameOver;
-        }
-        public bool GetIsGameWin()
-        {
-            return isGameWin;
-        }
+
+        #endregion
+
+        // Dành cho PlayerController
+        public bool GetIsGameOver() => IsGameOver;
+        public bool GetIsGameWin() => IsGameWin;
     }
 }
