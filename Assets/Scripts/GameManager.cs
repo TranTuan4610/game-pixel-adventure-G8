@@ -33,6 +33,7 @@ namespace PixelAdventure.Managers
         public bool IsGameWin { get; private set; }
         public bool IsTimerRunning { get; private set; }
 
+        private bool isTransitioning = false;
         private float elapsedTime = 0f;
         private int CurrentLevelIndex => PlayerPrefs.GetInt("SelectedLevel", 0);
 
@@ -42,6 +43,7 @@ namespace PixelAdventure.Managers
             if (gameOverUi) gameOverUi.SetActive(false);
             if (gameWinUi) gameWinUi.SetActive(false);
 
+            // CHỈ AddListener ở đây, KHÔNG gắn trong Inspector nữa
             if (nextLevelButton) nextLevelButton.onClick.AddListener(NextLevel);
             if (mainMenuButton) mainMenuButton.onClick.AddListener(GoToMenu);
         }
@@ -62,10 +64,10 @@ namespace PixelAdventure.Managers
             IsGameWin = false;
             IsTimerRunning = true;
             elapsedTime = 0f;
+            isTransitioning = false;
 
             UpdateScoreUI();
             UpdateTimerUI(0f);
-
             ActivateOnlyCurrentLevelInScene();
 
             Application.targetFrameRate = 60;
@@ -87,15 +89,8 @@ namespace PixelAdventure.Managers
             UpdateScoreUI();
         }
 
-        public void GameOver()
-        {
-            OnGameOver();
-        }
-
-        public void GameWin()
-        {
-            OnWin();
-        }
+        public void GameOver() => OnGameOver();
+        public void GameWin() => OnWin();
 
         public void OnGameOver()
         {
@@ -121,7 +116,11 @@ namespace PixelAdventure.Managers
             if (winBestTimeText) winBestTimeText.text = FormatTime(GetBestTime(CurrentLevelIndex));
 
             bool hasNext = CurrentLevelIndex + 1 < totalLevels;
-            if (nextLevelButton) nextLevelButton.gameObject.SetActive(hasNext);
+            if (nextLevelButton)
+            {
+                nextLevelButton.gameObject.SetActive(hasNext);
+                nextLevelButton.interactable = true;
+            }
 
             if (gameWinUi) gameWinUi.SetActive(true);
         }
@@ -181,30 +180,35 @@ namespace PixelAdventure.Managers
 
         public void RestartGame()
         {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
             Time.timeScale = 1f;
-            IsGameOver = false;
-            IsGameWin = false;
-            Score = 0;
-            elapsedTime = 0f;
-            IsTimerRunning = true;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void NextLevel()
         {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
             Time.timeScale = 1f;
             int next = CurrentLevelIndex + 1;
-            if (next >= totalLevels)
-                return;
+            if (next >= totalLevels) return;
 
             PlayerPrefs.SetInt("SelectedLevel", next);
             PlayerPrefs.Save();
+
+            if (nextLevelButton) nextLevelButton.interactable = false;
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void GoToMenu()
         {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
             Time.timeScale = 1f;
             SceneManager.LoadScene(menuSceneName);
         }

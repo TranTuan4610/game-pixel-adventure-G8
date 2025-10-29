@@ -2,23 +2,20 @@ using UnityEngine;
 
 public class ScreenOrientationManager : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
-        // Set the default orientation to landscape left
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-        
-        // Allow auto-rotation between landscape left and landscape right
+        DontDestroyOnLoad(gameObject);
+
+        // Bật đa chạm cho điều khiển trên mobile
+        Input.multiTouchEnabled = true;
+
+        // Cho phép auto-rotate nhưng CHỈ 2 hướng ngang
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
-        
-        // Enable full screen auto-rotation
+
+        // Bật AutoRotation 1 lần là đủ (đừng set mỗi frame)
         Screen.orientation = ScreenOrientation.AutoRotation;
     }
-    void Awake()
-{
-    DontDestroyOnLoad(gameObject);
-}
-        
 }
