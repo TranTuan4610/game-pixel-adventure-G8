@@ -220,17 +220,29 @@ public class PlayerController : MonoBehaviour
         if (!animator) return;
 
         bool isRunning = Mathf.Abs(targetHorizontal) > 0.1f && isGrounded;
-        bool isJumping = !isGrounded && rb.linearVelocity.y > 0;
+        bool isJumping = !isGrounded && rb.linearVelocity.y > 0.1f;
         bool isFalling = rb.linearVelocity.y < -0.1f && !isGrounded;
 
         int currentJumpCount = animator.GetInteger("jumpCount");
 
-        if (currentJumpCount > 0) isFalling = false;
-        else if (isFalling && !isJumping) animator.SetBool("isFalling", true);
+        // Only prevent fall animation during the initial jump phase
+        if (isJumping && currentJumpCount > 0)
+        {
+            isFalling = false;
+        }
+        else if (isFalling)
+        {
+            animator.SetBool("isFalling", true);
+        }
 
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumping", isJumping);
-        animator.SetBool("isFalling", isFalling);
+        
+        // Only set isFalling if we're not in a jump
+        if (!isJumping)
+        {
+            animator.SetBool("isFalling", isFalling);
+        }
 
         if (isGrounded)
         {
