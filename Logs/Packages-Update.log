@@ -46,3 +46,24 @@ Update Mode: updateDependencies
 
 The following packages were removed:
   com.unity.textmeshpro@3.2.0
+
+=== Sun Nov  2 12:36:01 2025
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.ads@4.4.2
+  com.unity.analytics@3.8.1
+  com.unity.collab-proxy@2.10.0
+  com.unity.ide.rider@3.0.38
+  com.unity.ide.visualstudio@2.0.25
+  com.unity.purchasing@4.12.2
+  com.unity.test-framework@1.6.0
+  com.unity.timeline@1.8.9
+  com.unity.xr.legacyinputhelpers@2.1.12
+  com.unity.ai.navigation@2.0.9
+The following packages were updated:
+  com.unity.ugui from version 1.0.0 to 2.0.0
+The following packages were removed:
+  com.unity.textmeshpro@3.2.0
