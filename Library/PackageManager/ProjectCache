@@ -1,6 +1,6 @@
 m_ProjectFiles:
   m_ManifestFileStatus:
-    m_FilePath: C:/Users/trand/Documents/code/game-pixel-adventure-G8/Packages/manifest.json
+    m_FilePath: C:/Users/trand/Documents/code/game-pixel-adventure-G8 - Copy/Packages/manifest.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
@@ -8,7 +8,7 @@ m_ProjectFiles:
       ticks: 638971524624398791
     m_Hash: 873791095
   m_LockFileStatus:
-    m_FilePath: C:/Users/trand/Documents/code/game-pixel-adventure-G8/Packages/packages-lock.json
+    m_FilePath: C:/Users/trand/Documents/code/game-pixel-adventure-G8 - Copy/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
@@ -19,7 +19,7 @@ m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
   m_LocalFileStatus: []
-m_ProjectPath: C:/Users/trand/Documents/code/game-pixel-adventure-G8/Packages
+m_ProjectPath: C:/Users/trand/Documents/code/game-pixel-adventure-G8 - Copy/Packages
 m_EditorVersion: 6000.2.9f1 (e0c4e791ab71)
 m_ResolvedPackages:
 - packageId: com.unity.2d.sprite@1.0.0
@@ -27,7 +27,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.2d.sprite@331abd9a1e2f
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.2d.sprite@331abd9a1e2f
   assetPath: Packages/com.unity.2d.sprite
   name: com.unity.2d.sprite
   displayName: 2D Sprite
@@ -107,7 +107,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.2d.tilemap@0b99f08c0204
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.2d.tilemap@0b99f08c0204
   assetPath: Packages/com.unity.2d.tilemap
   name: com.unity.2d.tilemap
   displayName: 2D Tilemap Editor
@@ -206,7 +206,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 3.1.5
   source: 1
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.cinemachine@5342685532bb
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.cinemachine@5342685532bb
   assetPath: Packages/com.unity.cinemachine
   name: com.unity.cinemachine
   displayName: Cinemachine
@@ -439,7 +439,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 1.0.0
   source: 2
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.multiplayer.center@f3fb577b3546
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.multiplayer.center@f3fb577b3546
   assetPath: Packages/com.unity.multiplayer.center
   name: com.unity.multiplayer.center
   displayName: Multiplayer Center
@@ -535,7 +535,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 5.0.0
   source: 2
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.textmeshpro@53f43edfd2e0
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.textmeshpro@53f43edfd2e0
   assetPath: Packages/com.unity.textmeshpro
   name: com.unity.textmeshpro
   displayName: TextMeshPro
@@ -622,7 +622,7 @@ m_ResolvedPackages:
   isDirectDependency: 1
   version: 2.0.0
   source: 2
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.ugui@7056cb05de4c
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.ugui@7056cb05de4c
   assetPath: Packages/com.unity.ugui
   name: com.unity.ugui
   displayName: Unity UI
@@ -3483,7 +3483,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 2.8.2
   source: 1
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.splines@1cb7d86fc7ff
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.splines@1cb7d86fc7ff
   assetPath: Packages/com.unity.splines
   name: com.unity.splines
   displayName: Splines
@@ -3604,7 +3604,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 1.3.2
   source: 1
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.mathematics@8017b507cc74
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.mathematics@8017b507cc74
   assetPath: Packages/com.unity.mathematics
   name: com.unity.mathematics
   displayName: Mathematics
@@ -3705,7 +3705,7 @@ m_ResolvedPackages:
   isDirectDependency: 0
   version: 2.1.0
   source: 1
-  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8\Library\PackageCache\com.unity.settings-manager@41738c275190
+  resolvedPath: C:\Users\trand\Documents\code\game-pixel-adventure-G8 - Copy\Library\PackageCache\com.unity.settings-manager@41738c275190
   assetPath: Packages/com.unity.settings-manager
   name: com.unity.settings-manager
   displayName: Settings Manager

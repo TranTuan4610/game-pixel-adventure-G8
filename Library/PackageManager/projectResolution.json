@@ -1,18 +1,18 @@
 {
   "context": {
-    "projectPath": "C:/Users/trand/Documents/code/game-pixel-adventure-G8/Packages",
+    "projectPath": "C:/Users/trand/Documents/code/game-pixel-adventure-G8 - Copy/Packages",
     "unityVersion": "6000.2.9f1"
   },
   "inputs": [
-    "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Packages\\manifest.json",
-    "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Packages\\packages-lock.json",
+    "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Packages\\manifest.json",
+    "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Packages\\packages-lock.json",
     "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.9f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\BuiltInPackagesCombined.sha1"
   ],
   "outputs": {
     "com.unity.2d.sprite@1.0.0": {
       "name": "com.unity.2d.sprite",
       "displayName": "2D Sprite",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.2d.sprite@331abd9a1e2f",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.2d.sprite@331abd9a1e2f",
       "fingerprint": "331abd9a1e2ff424a1ef2626e16936071ab7ce3d",
       "editorCompatibility": "2019.2.0a1",
       "version": "1.0.0",
@@ -22,7 +22,7 @@
     "com.unity.2d.tilemap@1.0.0": {
       "name": "com.unity.2d.tilemap",
       "displayName": "2D Tilemap Editor",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.2d.tilemap@0b99f08c0204",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.2d.tilemap@0b99f08c0204",
       "fingerprint": "0b99f08c02048105e3f87c2e1f97bcf4c860dae8",
       "editorCompatibility": "2019.2.0a1",
       "version": "1.0.0",
@@ -32,7 +32,7 @@
     "com.unity.cinemachine@3.1.5": {
       "name": "com.unity.cinemachine",
       "displayName": "Cinemachine",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.cinemachine@5342685532bb",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.cinemachine@5342685532bb",
       "fingerprint": "5342685532bbf7fa5b3a314c0b7ddba04ff17eff",
       "editorCompatibility": "2022.3.0a1",
       "version": "3.1.5",
@@ -42,7 +42,7 @@
     "com.unity.multiplayer.center@1.0.0": {
       "name": "com.unity.multiplayer.center",
       "displayName": "Multiplayer Center",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.multiplayer.center@f3fb577b3546",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.multiplayer.center@f3fb577b3546",
       "fingerprint": "f3fb577b3546594b97b8cc34307cd621f60f1c73",
       "editorCompatibility": "6000.0.0a1",
       "version": "1.0.0",
@@ -52,7 +52,7 @@
     "com.unity.textmeshpro@5.0.0": {
       "name": "com.unity.textmeshpro",
       "displayName": "TextMeshPro",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.textmeshpro@53f43edfd2e0",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.textmeshpro@53f43edfd2e0",
       "fingerprint": "53f43edfd2e0bf2438ca6e2038ba12107a181253",
       "editorCompatibility": "2023.2.0a1",
       "version": "5.0.0",
@@ -62,7 +62,7 @@
     "com.unity.ugui@2.0.0": {
       "name": "com.unity.ugui",
       "displayName": "Unity UI",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.ugui@7056cb05de4c",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.ugui@7056cb05de4c",
       "fingerprint": "7056cb05de4c8d42fc864130edd83b3a093a8505",
       "editorCompatibility": "2019.2.0a1",
       "version": "2.0.0",
@@ -344,7 +344,7 @@
     "com.unity.splines@2.8.2": {
       "name": "com.unity.splines",
       "displayName": "Splines",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.splines@1cb7d86fc7ff",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.splines@1cb7d86fc7ff",
       "fingerprint": "1cb7d86fc7ffee63824ca302b2b8982178eeea83",
       "editorCompatibility": "2022.3.0a1",
       "version": "2.8.2",
@@ -354,7 +354,7 @@
     "com.unity.mathematics@1.3.2": {
       "name": "com.unity.mathematics",
       "displayName": "Mathematics",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.mathematics@8017b507cc74",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.mathematics@8017b507cc74",
       "fingerprint": "8017b507cc74bf0a1dd14b18aa860569f807314d",
       "editorCompatibility": "2021.3.0a1",
       "version": "1.3.2",
@@ -364,7 +364,7 @@
     "com.unity.settings-manager@2.1.0": {
       "name": "com.unity.settings-manager",
       "displayName": "Settings Manager",
-      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8\\Library\\PackageCache\\com.unity.settings-manager@41738c275190",
+      "resolvedPath": "C:\\Users\\trand\\Documents\\code\\game-pixel-adventure-G8 - Copy\\Library\\PackageCache\\com.unity.settings-manager@41738c275190",
       "fingerprint": "41738c27519039c335849eb78949382f4d7a3544",
       "editorCompatibility": "2022.3.0a1",
       "version": "2.1.0",
